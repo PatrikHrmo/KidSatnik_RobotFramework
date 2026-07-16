@@ -1,0 +1,21 @@
+[tool.robocop.lint]
+ignore = [
+    "DOC01",
+    "DOC02",
+    "DOC03",
+    "DOC04",
+    "NAME08",
+    "COM02",
+    "DEPR05",
+    "DEPR06",
+    "LEN01",
+    "LEN03",
+    "LEN04",
+    "LEN06",
+    "LEN07"
+]
+configure = [
+    "LEN08.line_length=160",
+    "LEN28.max_lines=1500",
+    "LEN32.max_len=70"
+]
