@@ -1,0 +1,16 @@
+.venv/
+venv/
+.idea/
+idea/
+.vscode/
+vscode/
+output/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.robocop_cache/
