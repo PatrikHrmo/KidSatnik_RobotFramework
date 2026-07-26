@@ -25,3 +25,10 @@ Close Test Browser
     [Documentation]    Closes all browsers.
 
     Close Browser    ALL
+
+Verify That Elements Are Loaded And Visible
+    [Arguments]    ${ElementsList}
+    
+    FOR    ${element}    IN    @{ElementsList}
+        Wait For Elements State    ${element}    visible
+    END
