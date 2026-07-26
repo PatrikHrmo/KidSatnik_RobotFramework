@@ -1,5 +1,7 @@
 *** Settings ***
 Library    Browser
+Resource    ../Resources/Keywords/Login Keywords.resource
+Variables    ../Resources/Core/env_variables.py
 
 
 *** Keywords ***
@@ -19,6 +21,8 @@ Open And Setup Test Browser
     Get Url    ==    about:blank
     ${BrowserID}=    Get Browser Ids    ACTIVE
 
+    Set Browser Timeout    3s
+
     RETURN    ${BrowserID}
 
 Close Test Browser
@@ -28,7 +32,12 @@ Close Test Browser
 
 Verify That Elements Are Loaded And Visible
     [Arguments]    ${ElementsList}
-    
+
     FOR    ${element}    IN    @{ElementsList}
         Wait For Elements State    ${element}    visible
     END
+
+Open KidSatnik Login Page
+    Go To    ${URL}
+    Get Url    ==    ${URL}
+    Wait For Load State    domcontentloaded    timeout=5s

@@ -16,3 +16,7 @@ ${Index_LogoutBnt}=    ${Index_Navbar}//button[contains(text(), "Logout")]
 #Footer Section
 ${Index_Footer}=    xpath=//*[@data-testid="dashboard-footer"]
 ${Index_Footer_Copyright}=    ${Index_Footer}//*[contains(text(), "© Patrik Hrmo 2026")]
+
+@{IndexHeaderFooter_Elements}=    ${Index_Header_Kid}
+...    ${Index_Header_Satnik}
+...    ${Index_Footer_Copyright}
