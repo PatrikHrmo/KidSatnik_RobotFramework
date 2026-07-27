@@ -2,6 +2,7 @@
 Library    Browser
 Resource    ../Resources/Keywords/Login Keywords.resource
 Variables    ../Resources/Core/env_variables.py
+Library    RequestsLibrary
 
 
 *** Keywords ***
@@ -41,3 +42,20 @@ Open KidSatnik Login Page
     Go To    ${URL}
     Get Url    ==    ${URL}
     Wait For Load State    domcontentloaded    timeout=5s
+
+Delete All Emails
+    [Arguments]    ${URL}=${MAIL_URL}
+
+    Create Session    mail    ${URL}
+    DELETE On Session    mail    /api/v1/messages
+
+Check Received Email
+    [Arguments]    ${URL}=${MAIL_URL}
+
+    Create Session    mail    ${URL}
+
+    ${list}=    GET On Session    mail    /api/v1/messages    expected_status=200
+    ${id}=      Set Variable    ${list.json()}[messages][0][ID]
+    ${msg}=     GET On Session    mail    /api/v1/message/${id}    expected_status=200
+
+    RETURN      ${msg.json()}[Text]
