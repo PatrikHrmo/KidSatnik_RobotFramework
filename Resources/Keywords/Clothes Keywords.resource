@@ -28,26 +28,28 @@ Add Clothing Item
 
     Click    ${AddItem_SaveBtn}
 
-    ${Row}=    Evaluate    ${NumberOfRows} + 1
-    Check Added Clothing Item In The Table    ItemData=${ItemData}    Row=${Row}
+    Check Added Clothing Item In The Table    ItemData=${ItemData}    Row=${NumberOfRows}
+
+    RETURN    ${NumberOfRows}
 
 Get Number Of Rows In The Items Table
     ${NumberOfRows}=    Get Element Count    ${ClothesTable_Rows}//tr
+    ${NumberOfRows}=    Convert To Integer    ${NumberOfRows}
 
     IF    $NumberOfRows == 1
-        TRY
-            Get Text    ${ClothesTable_Rows}//tr[1]    *=    No item
-            VAR    ${NumberOfRows}=    0
-        EXCEPT
-            No Operation
-        END
+        ${Status}=    Run Keyword And Return Status    Get Text    ${ClothesTable_Rows}//tr[1]    *=    No item
+        IF    $Status    RETURN    0
     END
 
     RETURN    ${NumberOfRows}
 
 Check Added Clothing Item In The Table
     [Arguments]    ${ItemData}
-    ...            ${Row}=1
+    ...            ${Row}
+
+    IF    "${Row}" == "0"
+        VAR    ${Row}=    1
+    END
 
     Get Text    ${ClothesTable_Rows}//tr[${Row}]//td[1]    *=    ${ItemData["name"]}
     Get Text    ${ClothesTable_Rows}//tr[${Row}]//td[2]    *=    ${ItemData["description"]}
@@ -70,3 +72,20 @@ Remove Clothing Item
     ${FinalNumberOfRows}=    Get Number Of Rows In The Items Table
     ${Result}=    Evaluate    ${NumberOfRows} - ${FinalNumberOfRows}
     Should Be Equal As Integers    ${Result}    1
+
+Remove All Clothing Items
+    Click    ${Index_ClothesBnt}
+    Verify That Clothes Page Loaded Correctly
+    ${NumberOfRows}=    Get Number Of Rows In The Items Table
+    ${NumberOfRows}=    Convert To Integer    ${NumberOfRows}
+
+    IF    $NumberOfRows > 0
+        FOR    ${Number}    IN RANGE    ${NumberOfRows}
+            ${Number}=    Evaluate    ${Number} + 1
+            VAR    ${RemoveBtn}=    ${ClothesTable_Rows}//tr[${Number}]//button[contains(text(), "Remove")]
+            Handle Future Dialogs    action=accept
+            Click    ${RemoveBtn}
+            Wait For Elements State    ${RemoveBtn}    hidden
+            Reload
+        END
+    END

@@ -38,7 +38,13 @@ Login Into KidSatnik
     ...            ${ErrorType}=${None}
 
     ${ActualURL}=    Get Url
-    IF    $ActualUrl != $URL    Open KidSatnik Login Page
+    IF    $ActualUrl != $URL
+        TRY
+            Logout From KidSatnik
+        EXCEPT
+            Open KidSatnik Login Page
+        END
+    END
 
     TRY
         ${LoginStatus}=    Type Login Credentials    User=${User}
