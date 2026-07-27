@@ -14,25 +14,46 @@ Verify That Login Page Loaded Correctly
 
 Type Login Credentials
     [Arguments]    ${User}
+    ...            ${ErrorMessage}=${False}
+    ...            ${ErrorType}=${None}
 
     Type Text    ${LoginPage_LoginField_UsernameInput}    ${User["username"]}
     Type Text    ${LoginPage_LoginField_PasswordInput}    ${User["password"]}
     Click    ${LoginPage_LoginField_SubmitBtn}
 
+    IF    $ErrorMessage
+        IF    "${ErrorType}" == "Admin"
+            Get Text    ${LoginPage_LoginField_Error}    *=    Forbidden: Administrator cannot login.
+            VAR    ${LoginStatus}=    Failed Login
+        ELSE IF    "${ErrorType}" == "Wrong Credentials"
+            Get Text    ${LoginPage_LoginField_Error}    *=    Incorrect credentials.
+            VAR    ${LoginStatus}=    Failed Login
+        END
+        RETURN    ${LoginStatus}
+    END
+
 Login Into KidSatnik
     [Arguments]    ${User}
+    ...            ${ErrorMessage}=${False}
+    ...            ${ErrorType}=${None}
 
     ${ActualURL}=    Get Url
-    IF    $ActualUrl != $URL    Go To KidSatnik Login Page
+    IF    $ActualUrl != $URL    Open KidSatnik Login Page
 
     TRY
-        Type Login Credentials    ${User}
-        Verify That Index Page Loaded Correctly
+        ${LoginStatus}=    Type Login Credentials    User=${User}
+        ...    ErrorMessage=${ErrorMessage}
+        ...    ErrorType=${ErrorType}
+        IF    $ErrorMessage    RETURN    ${LoginStatus}
     EXCEPT
         Reload
-        Type Login Credentials    ${User}
-        Verify That Index Page Loaded Correctly
+        ${LoginStatus}=    Type Login Credentials    User=${User}
+        ...    ErrorMessage=${ErrorMessage}
+        ...    ErrorType=${ErrorType}
+        IF    $ErrorMessage    RETURN    ${LoginStatus}
     END
+
+    Verify That Index Page Loaded Correctly
 
 Logout From KidSatnik
     ${ActualUrl}=    Get Url

@@ -9,3 +9,9 @@ UserStaff = {
     'password': 'something1234',
     'email': 'someemail'
 }
+
+AdminUser = {
+    'username': 'kid_admin_user',
+    'password': 'somerandompass',
+    'email': 'someemail'
+}
