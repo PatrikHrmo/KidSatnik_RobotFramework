@@ -1,3 +1,7 @@
+*** Settings ***
+Variables    ../Core/Private/user_credentials.py
+
+
 *** Variables ***
 #Main
 ${Clothes_MainContainer}=    xpath=//*[@data-testid="dashboard-main-content"]
@@ -52,3 +56,9 @@ ${AddItem_SaveBtn}=    ${AddItem_ModalBox}//button[contains(text(), "Save")]
 ...    ${AddItem_WhereLabel}
 ...    ${AddItem_WhereInput}
 ...    ${AddItem_SaveBtn}
+
+&{some_item_data}=    name=JOFOFJ
+...    description=somedescripton
+...    photo=${EXECDIR}/Resources/TestData/test.jpg
+...    owner=Daisy
+...    location=${UserStaff}[username]
