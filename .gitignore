@@ -16,3 +16,4 @@ __pycache__/
 .robocop_cache/
 .Resources/TestData/
 Resouces/Core/Private
+Resources/Core/Private/
